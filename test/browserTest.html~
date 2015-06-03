@@ -1,0 +1,32 @@
+<html>
+<head>
+	<script type="text/javascript" src="class.js" >
+	
+	</script>
+	
+	<script type="text/javascript" src="GrandParent.js" >
+	
+	</script>
+	<script type="text/javascript" src="Parent.js" >
+	
+	</script>
+	<script type="text/javascript" src="Child.js" >
+	
+	</script>
+	<script type="text/javascript" src="GrandChild.js" >
+	
+	</script>
+	<script type="text/javascript" src="GreatGrandChild.js" >
+	
+	</script>
+	
+	<script type="text/javascript" src="browserTest.js" >
+	
+	</script>
+</head>
+
+<body>
+hi
+</body>
+
+</html>

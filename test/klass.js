@@ -1,22 +1,21 @@
-function Class(definition){
+function Klass(definition){
 	//check to make sure new was used to call constructor
-	if(!(this instanceof Class)){
-		return new Class(definition);
+	if(!(this instanceof Klass)){
+		return new Klass(definition);
 	}
-	var m_type = definition.type || 'Object';
 	var m_ctor= definition.constructor || function(){};
+	var m_type = m_ctor.name;
 	var m_parent = definition.parentClass || Object;
 	var m_parentArgs = definition.parentArgs || null;
 	var m_protoMembers = definition.protoMembers || {};
 	var m_numInstances = 0;
-	var m_super = null;
 		
 	function klass(){
 		//check to make sure new was used to call constructor
 		if(!(this instanceof klass)){
 			return new klass();
 		}
-		var _super;// = Object.create(null);
+		var _super;
 	 	var _instID = m_numInstances;
 	 	if(m_parent != Object){
 	 		var parentArgs;
@@ -48,7 +47,6 @@ function Class(definition){
 	 			parentArgs = arguments;
 	 		}
 	 		m_parent.apply(this,parentArgs);
-	 		//_super = createSuper(_super,this,m_parent);
 	 	} 
 	 	
 	 	_super = this._super || Object.create(new Object());
@@ -56,11 +54,24 @@ function Class(definition){
 	 	
 	 	m_ctor.apply(this,arguments);
 	 	this._super = _super;
-	 	this.get_instID = function(){
+	 	this._instID = function(){
 	 		return _instID;
 	 	};
-	 	m_numInstances++;
-	 	function createSuper(mySuper, scope, myParent){
+	 	m_numInstances++;	 	
+	}
+	
+	klass.prototype = Object.create(m_parent.prototype);
+	klass.prototype.constructor = m_ctor;
+	for(var prop in m_protoMembers){
+		klass.prototype[prop] = m_protoMembers[prop];
+	}
+	klass.prototype.get_numInsts = function(){
+		return m_numInstances;
+	};
+	klass.prototype._type = m_type;
+	return klass;
+	
+	function createSuper(mySuper, scope, myParent){
 	 		var m_super = Object.create(myParent.prototype);
 	 		for(var prop in scope){
 	 			if(scope.hasOwnProperty(prop)){
@@ -74,22 +85,5 @@ function Class(definition){
 	 			}
 	 		}
 	 		return m_super;	 		
-	 	}
-	}
-	
-	klass.prototype = Object.create(m_parent.prototype);
-	klass.prototype.constructor = m_ctor;
-	for(var prop in m_protoMembers){
-		klass.prototype[prop] = m_protoMembers[prop];
-	}
-	klass.prototype.get_numInsts = function(){
-		return m_numInstances;
-	};
-	klass.prototype.get_type = function(){
-		return m_type;
-	};
-	//klass.prototype._super = function (methodName, args){
-	 		//return m_super[methodName].apply(this,args);
-	//};
-	return klass;
+	 }
 }
